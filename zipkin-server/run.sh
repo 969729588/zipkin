@@ -7,10 +7,18 @@ start() {
     nohup java -Xmx128m -Xms128m \
     -jar ${JAR_NAME} \
     --server.port=9411 \
-    > ${LOG_FILE} &
+    --zipkin.collector.rabbitmq.enabled=true \
+    --zipkin.collector.rabbitmq.addresses=192.168.223.136:5672 \
+    --zipkin.collector.rabbitmq.username=admin \
+    --zipkin.collector.rabbitmq.password=admin \
+    --zipkin.storage.type=elasticsearch \
+    --zipkin.storage.elasticsearch.hosts=http://192.168.223.136:9200 \
+    --zipkin.storage.elasticsearch.index=zipkin \
+    --zipkin.storage.elasticsearch.timeout=10000 \
+    > ${LOG_FILE} 2>&1 &
 }
 
-# 启动后的访问地址是http://${tx-lcn.manager.host}:{server.port}/admin/index.html
+# 启动后的访问地址是http://${服务器ip}:{server.port}
 
 stop() {
     while true
